@@ -1,8 +1,16 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <button @click="askPermision">ask permision</button>
+    <img alt="Vue logo" src="./assets/logo.png"><br/>
+    <button @click="askPermision">ask permision</button><br/>
     <button @click="sendNotif">send notif</button>
+    <ul>
+      <li v-for="(notif, i) in notifications" :key="i">
+        <div>
+          <b>{{notif.title}}</b>
+          <p>{{notif.body}}</p>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -14,10 +22,15 @@ export default {
   name: 'App',
   components: {
   },
+  data () {
+    return {
+      notifications: []
+    }
+  },
   created () {
     console.log('created')
     firebase.messaging().onMessage((payload) => {
-      console.log('payload', payload)
+      this.notifications.push(payload.notification)
     })
   },
   methods: {
